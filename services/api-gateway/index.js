@@ -1,14 +1,38 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
+
+const {
+  createProxyMiddleware,
+} = require("http-proxy-middleware");
 
 const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("API Gateway Running");
-});
+app.use(
+  "/api/auth",
+  createProxyMiddleware({
+    target: "http://localhost:3001",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/auth": "",
+    },
+  })
+);
 
-app.listen(3000, () => {
-  console.log("API Gateway running on port 3000");
+app.use(
+  "/api/tasks",
+  createProxyMiddleware({
+    target: "http://localhost:3002",
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/tasks": "",
+    },
+  })
+);
+
+app.listen(process.env.PORT, () => {
+  console.log(`API Gateway running on ${process.env.PORT}`);
 });
