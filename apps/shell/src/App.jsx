@@ -6,6 +6,9 @@ const TasksApp = React.lazy(() => import("tasksmf/TasksApp"));
 const DashboardApp = React.lazy(() => import("dashboardmf/DashboardApp"));
 
 function App() {
+
+  const token = localStorage.getItem("token");
+
   return (
     <BrowserRouter>
 
@@ -42,6 +45,15 @@ function App() {
               Auth
             </Link>
 
+            <button
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
+            >
+              Logout
+            </button>
+
           </div>
 
         </nav>
@@ -66,12 +78,24 @@ function App() {
 
               <Route
                 path="/"
-                element={<DashboardApp />}
+                element={
+                  token ? (
+                    <DashboardApp />
+                  ) : (
+                    <AuthApp />
+                  )
+                }
               />
 
               <Route
                 path="/tasks"
-                element={<TasksApp />}
+                element={
+                  token ? (
+                    <TasksApp />
+                  ) : (
+                    <AuthApp />
+                  )
+                }
               />
 
               <Route

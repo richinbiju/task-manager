@@ -1,49 +1,48 @@
-const cards = [
-  {
-    title: "Tasks",
-    value: "24",
-  },
-  {
-    title: "Completed",
-    value: "18",
-  },
-  {
-    title: "Pending",
-    value: "6",
-  },
-];
+import { useEffect, useState } from "react";
+
+import axios from "axios";
 
 export default function App() {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/tasks/tasks"
+      );
+
+      setTasks(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const completedTasks = tasks.filter(
+    (task) => task.status === "completed"
+  ).length;
+
+  const pendingTasks =
+    tasks.length - completedTasks;
+
   return (
-    <div className="min-h-screen bg-green-950 text-white p-10">
+    <div style={{ padding: "40px" }}>
+      <h1>Dashboard</h1>
 
-      <div className="max-w-6xl mx-auto">
+      <div>
+        <h2>Total Tasks: {tasks.length}</h2>
 
-        <h1 className="text-5xl font-bold mb-10">
-          Dashboard
-        </h1>
+        <h2>
+          Completed Tasks: {completedTasks}
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              className="bg-green-900 p-8 rounded-2xl"
-            >
-              <h2 className="text-xl text-green-200">
-                {card.title}
-              </h2>
-
-              <p className="text-5xl font-bold mt-4">
-                {card.value}
-              </p>
-            </div>
-          ))}
-
-        </div>
-
+        <h2>
+          Pending Tasks: {pendingTasks}
+        </h2>
       </div>
-
     </div>
   );
 }

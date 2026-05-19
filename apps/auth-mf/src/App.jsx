@@ -1,41 +1,115 @@
+import { useState } from "react";
+import axios from "axios";
+
 export default function App() {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const endpoint = isLogin
+        ? "login"
+        : "signup";
+
+      const response = await axios.post(
+        `http://localhost:3000/api/auth/${endpoint}`,
+        formData
+      );
+
+      console.log(response.data);
+
+      alert(
+        isLogin
+          ? "Login successful"
+          : "Signup successful"
+      );
+
+      if (isLogin) {
+        localStorage.setItem(
+          "token",
+          response.data.token
+        );
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.user)
+        );
+      }
+    } catch (error) {
+      console.error(error);
+
+      alert("Authentication failed");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center">
-      
-      <div className="w-full max-w-md bg-zinc-900 p-8 rounded-2xl shadow-2xl">
+    <div style={{ padding: "40px" }}>
+      <h1>
+        {isLogin ? "Login" : "Signup"}
+      </h1>
 
-        <h1 className="text-4xl font-bold mb-2">
-          Welcome Back
-        </h1>
-
-        <p className="text-zinc-400 mb-8">
-          Sign in to continue
-        </p>
-
-        <div className="space-y-4">
-
+      <form onSubmit={handleSubmit}>
+        {!isLogin && (
           <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-3 rounded-lg bg-zinc-800 border border-zinc-700 outline-none"
+            type="text"
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
           />
+        )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 rounded-lg bg-zinc-800 border border-zinc-700 outline-none"
-          />
+        <br />
+        <br />
 
-          <button
-            className="w-full bg-white text-black py-3 rounded-lg font-semibold"
-          >
-            Login
-          </button>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+        />
 
-        </div>
+        <br />
+        <br />
 
-      </div>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={handleChange}
+        />
 
+        <br />
+        <br />
+
+        <button type="submit">
+          {isLogin ? "Login" : "Signup"}
+        </button>
+      </form>
+
+      <br />
+
+      <button
+        onClick={() =>
+          setIsLogin(!isLogin)
+        }
+      >
+        Switch to{" "}
+        {isLogin ? "Signup" : "Login"}
+      </button>
     </div>
   );
 }
