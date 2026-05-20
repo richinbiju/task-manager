@@ -12,62 +12,42 @@ function App() {
   return (
     <BrowserRouter>
 
-      <div className="min-h-screen bg-zinc-950 text-white">
+      <div className="min-h-screen bg-gray-100">
 
         {/* NAVBAR */}
 
-        <nav className="flex items-center justify-between px-8 py-5 border-b border-zinc-800">
+        <nav className="bg-black text-white p-4 flex gap-6 items-center">
+          <Link to="/">Dashboard</Link>
 
-          <h1 className="text-2xl font-bold">
-            AI Task Manager
-          </h1>
+          <Link to="/tasks">
+            Tasks
+          </Link>
 
-          <div className="flex gap-6 text-lg">
+          <Link to="/auth">
+            Auth
+          </Link>
 
-            <Link
-              to="/"
-              className="hover:text-blue-400"
-            >
-              Dashboard
-            </Link>
-
-            <Link
-              to="/tasks"
-              className="hover:text-blue-400"
-            >
-              Tasks
-            </Link>
-
-            <Link
-              to="/auth"
-              className="hover:text-blue-400"
-            >
-              Auth
-            </Link>
-
-            <button
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload();
-              }}
-            >
-              Logout
-            </button>
-
-          </div>
-
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+            className="ml-auto bg-red-600 px-4 py-2 rounded"
+          >
+            Logout
+          </button>
         </nav>
 
         {/* REMOTE RENDER AREA */}
 
-        <div className="min-h-[calc(100vh-80px)]">
+        <div className="p-6">
 
           <Suspense
             fallback={
               <div className="flex items-center justify-center h-full">
 
                 <h1 className="text-3xl font-bold">
-                  Loading Microfrontend...
+                  Loading...
                 </h1>
 
               </div>

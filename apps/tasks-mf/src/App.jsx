@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -12,8 +13,13 @@ export default function App() {
   const fetchTasks = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/tasks/tasks"
-      );
+        "http://localhost:3000/api/tasks/tasks",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );  
 
       setTasks(response.data);
     } catch (error) {
@@ -26,12 +32,18 @@ export default function App() {
   }, []);
 
   const createTask = async () => {
+    setLoading(true);
     try {
       await axios.post(
         "http://localhost:3000/api/tasks/tasks",
         {
           ...formData,
           user_id: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 
@@ -41,20 +53,36 @@ export default function App() {
       });
 
       fetchTasks();
+
+      toast.success("Task created");
     } catch (error) {
       console.error(error);
+
+      toast.error("Operation failed");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
   const deleteTask = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/tasks/tasks/${id}`
+        `http://localhost:3000/api/tasks/tasks/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
 
       fetchTasks();
+
+      toast.success("Task deleted");
     } catch (error) {
       console.error(error);
+
+      toast.error("Operation failed");
     }
   };
 
@@ -64,73 +92,85 @@ export default function App() {
         `http://localhost:3000/api/tasks/tasks/${id}`,
         {
           status: "completed",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 
       fetchTasks();
+
+      toast.success("Task completed");
     } catch (error) {
       console.error(error);
+
+      toast.error("Operation failed");
     }
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Tasks</h1>
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-4xl font-bold mb-6">Tasks</h1>
 
-      <input
-        type="text"
-        placeholder="Title"
-        value={formData.title}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            title: e.target.value,
-          })
-        }
-      />
+      <div className="bg-white p-6 rounded-xl shadow-md mb-6">
+        <input
+          type="text"
+          
+          placeholder="Title"
+          value={formData.title}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              title: e.target.value,
+            })
+          }
+          className="w-full border p-3 rounded"
+        />
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <textarea
-        placeholder="Description"
-        value={formData.description}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            description: e.target.value,
-          })
-        }
-      />
+        <textarea
+          placeholder="Description"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              description: e.target.value,
+            })
+          }
+          className="w-full border p-3 rounded"
+        />
 
-      <br />
-      <br />
+        <br />
+        <br />
 
-      <button onClick={createTask}>
-        Create Task
-      </button>
+        <button onClick={createTask} disabled={loading}
+        className="bg-black text-white px-4 py-2 rounded">
+          {loading ? "Creating..." : "Create Task"}
+        </button>
+      </div>
 
       <hr />
 
       {tasks.map((task) => (
         <div
           key={task.id}
-          style={{
-            border: "1px solid gray",
-            padding: "20px",
-            marginBottom: "20px",
-          }}
+          className="bg-white rounded-xl shadow-md p-5 mb-4"
         >
-          <h3>{task.title}</h3>
+          <h3 className="text-2xl font-bold mb-2">{task.title}</h3>
 
-          <p>{task.description}</p>
+          <p className="text-gray-700 mb-2">{task.description}</p>
 
-          <p>Status: {task.status}</p>
+          <p className="mb-4 font-medium">Status: {task.status}</p>
 
           <button
             onClick={() =>
               updateTask(task.id)
             }
+            className="bg-green-600 text-white px-4 py-2 rounded mr-2"
           >
             Complete
           </button>
@@ -139,6 +179,7 @@ export default function App() {
             onClick={() =>
               deleteTask(task.id)
             }
+            className="bg-red-600 text-white px-4 py-2 rounded"
           >
             Delete
           </button>

@@ -3,6 +3,10 @@ import ReactDOM from "react-dom/client";
 
 import App from "./App.jsx";
 
+import "./index.css";
+
+import { Toaster } from "react-hot-toast";
+
 import {
   QueryClient,
   QueryClientProvider,
@@ -15,6 +19,7 @@ ReactDOM.createRoot(
 ).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
+      <Toaster position="top-right" />
       <App />
     </QueryClientProvider>
   </React.StrictMode>

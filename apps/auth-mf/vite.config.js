@@ -18,7 +18,7 @@ export default defineConfig({
         "./AuthApp": "./src/App.jsx",
       },
 
-      shared: ["react", "react-dom"],
+      shared: ["react", "react-dom", "react-hot-toast"],
     }),
   ],
 

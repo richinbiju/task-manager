@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function App() {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +21,7 @@ export default function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const endpoint = isLogin
@@ -32,7 +35,7 @@ export default function App() {
 
       console.log(response.data);
 
-      alert(
+      toast.success(
         isLogin
           ? "Login successful"
           : "Signup successful"
@@ -48,68 +51,83 @@ export default function App() {
           "user",
           JSON.stringify(response.data.user)
         );
+        window.location.href = "http://localhost:5000";
       }
     } catch (error) {
       console.error(error);
 
-      alert("Authentication failed");
+      toast.error("Authentication failed");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>
-        {isLogin ? "Login" : "Signup"}
-      </h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
 
-      <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <input
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-          />
-        )}
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
 
-        <br />
-        <br />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-
-        <br />
-        <br />
-
-        <button type="submit">
+        <h1 className="text-3xl font-bold mb-6 text-center">
           {isLogin ? "Login" : "Signup"}
+        </h1>
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+        >
+
+          {!isLogin && (
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              onChange={handleChange}
+              className="w-full border p-3 rounded"
+            />
+          )}
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            className="w-full border p-3 rounded"
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full border p-3 rounded"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-black text-white p-3 rounded disabled:opacity-50" disabled={loading}
+          >
+            {loading
+              ? "Loading..."
+              : isLogin
+                ? "Login"
+                : "Signup"}
+          </button>
+
+        </form>
+
+        <button
+          onClick={() =>
+            setIsLogin(!isLogin)
+          }
+          className="mt-4 text-blue-600"
+        >
+          Switch to{" "}
+          {isLogin ? "Signup" : "Login"}
         </button>
-      </form>
 
-      <br />
+      </div>
 
-      <button
-        onClick={() =>
-          setIsLogin(!isLogin)
-        }
-      >
-        Switch to{" "}
-        {isLogin ? "Signup" : "Login"}
-      </button>
     </div>
   );
 }

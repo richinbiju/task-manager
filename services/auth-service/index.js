@@ -15,12 +15,37 @@ const app = express();
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
+
     info: {
-      title: "Auth Service API",
+      title: "Task Manager API",
       version: "1.0.0",
+      description:
+        "Task Manager Microservices API",
     },
+
+    servers: [
+      {
+        url: "http://localhost:3000",
+      },
+    ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ["./index.js"],
+  apis: ["./index.js"]
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -38,6 +63,30 @@ app.get("/", (req, res) => {
   res.send("Auth Service Running");
 });
 
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User created successfully
+ */
 app.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -61,6 +110,28 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login user
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
