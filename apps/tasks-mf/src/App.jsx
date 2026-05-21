@@ -13,7 +13,7 @@ export default function App() {
   const fetchTasks = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/tasks/tasks",
+        `${import.meta.env.VITE_API_URL}/api/tasks/tasks`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -21,7 +21,11 @@ export default function App() {
         }
       );  
 
-      setTasks(response.data);
+      setTasks(
+        Array.isArray(response.data)
+          ? response.data
+          : []
+      );
     } catch (error) {
       console.error(error);
     }
@@ -35,7 +39,7 @@ export default function App() {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:3000/api/tasks/tasks",
+        `${import.meta.env.VITE_API_URL}/api/tasks/tasks`,
         {
           ...formData,
           user_id: 1,
@@ -68,7 +72,7 @@ export default function App() {
   const deleteTask = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:3000/api/tasks/tasks/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/tasks/tasks/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -89,7 +93,7 @@ export default function App() {
   const updateTask = async (id) => {
     try {
       await axios.put(
-        `http://localhost:3000/api/tasks/tasks/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/tasks/tasks/${id}`,
         {
           status: "completed",
         },

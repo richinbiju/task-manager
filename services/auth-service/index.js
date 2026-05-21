@@ -25,7 +25,7 @@ const swaggerOptions = {
 
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://auth-service-p9ps.onrender.com",
       },
     ],
 
@@ -56,7 +56,13 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 app.get("/", (req, res) => {

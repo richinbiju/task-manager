@@ -27,7 +27,7 @@ const swaggerOptions = {
 
     servers: [
       {
-        url: "http://localhost:3000",
+        url: "https://task-service-8t0l.onrender.com",
       },
     ],
 
@@ -58,7 +58,13 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -82,7 +88,7 @@ app.get(
   async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC`, [req.user.id]
+      `SELECT * FROM tasks WHERE user_id = $1 ORDER BY id DESC`, [req.user.id]
     );
 
     res.json(result.rows);

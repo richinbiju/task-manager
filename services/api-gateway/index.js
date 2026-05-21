@@ -9,12 +9,22 @@ const {
 
 const app = express();
 
-app.use(cors());
+const PORT =
+  process.env.PORT || 3000;
+
+app.listen(PORT);
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 app.use(
   "/api/auth",
   createProxyMiddleware({
-    target: "http://localhost:3001",
+    target: process.env.AUTH_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
       "^/api/auth": "",
@@ -25,7 +35,7 @@ app.use(
 app.use(
   "/api/tasks",
   createProxyMiddleware({
-    target: "http://localhost:3002",
+    target: process.env.TASK_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
       "^/api/tasks": "",

@@ -29,7 +29,7 @@ export default function App() {
         : "signup";
 
       const response = await axios.post(
-        `http://localhost:3000/api/auth/${endpoint}`,
+        `${import.meta.env.VITE_API_URL}/api/auth/${endpoint}`,
         formData
       );
 
