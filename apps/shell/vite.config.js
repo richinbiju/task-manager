@@ -11,11 +11,11 @@ export default defineConfig({
 
     federation({
       name: "shell",
-
+      
       remotes: {
-        authmf: "http://localhost:5001/assets/remoteEntry.js",
-        tasksmf: "http://localhost:5002/assets/remoteEntry.js",
-        dashboardmf: "http://localhost:5003/assets/remoteEntry.js",
+        authmf: "https://auth-mf-zeta.vercel.app/assets/remoteEntry.js",
+        tasksmf: "https://tasks-mf.vercel.app/assets/remoteEntry.js",
+        dashboardmf: "https://dashboard-mf-beta.vercel.app/assets/remoteEntry.js",
       },
 
       shared: ["react", "react-dom", "react-hot-toast"],
@@ -23,7 +23,13 @@ export default defineConfig({
   ],
 
   server: {
+    host: true,
     port: 5000,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin":
+        "*",
+    },
   },
 
   build: {

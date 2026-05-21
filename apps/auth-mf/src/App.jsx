@@ -51,7 +51,7 @@ export default function App() {
           "user",
           JSON.stringify(response.data.user)
         );
-        window.location.href = "http://localhost:5000";
+        window.location.href = "https://shell-self.vercel.app";
       }
     } catch (error) {
       console.error(error);
