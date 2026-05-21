@@ -51,7 +51,7 @@ export default function App() {
           "user",
           JSON.stringify(response.data.user)
         );
-        window.location.href = "https://shell-self.vercel.app";
+        window.location.href = "https://task-manager-three-plum-11.vercel.app";
       }
     } catch (error) {
       console.error(error);

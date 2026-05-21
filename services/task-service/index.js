@@ -10,6 +10,8 @@ const pool = require("./db");
 
 const app = express();
 
+app.use(express.json());
+
 const authMiddleware = require(
   "./middleware/authMiddleware"
 );
@@ -64,8 +66,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Task Service Running");
@@ -184,11 +184,17 @@ app.put(
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error(error);
+    console.error(
+      error
+    );
 
-    res.status(500).json({
-      message: "Failed to update task",
+    res
+    .status(500)
+    .json({
+      message:
+      error.message
     });
+
   }
 });
 

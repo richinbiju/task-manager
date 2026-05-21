@@ -61,8 +61,8 @@ The frontend uses a microfrontend architecture with Module Federation.
 
 ### Swagger Endpoints
 
-- Auth Service: http://localhost:3001/api-docs
-- Task Service: http://localhost:3002/api-docs
+- Auth Service: https://auth-service-p9ps.onrender.com/api-docs/
+- Task Service: https://task-service-8t0l.onrender.com/api-docs/
 
 # Setup Instructions
 
@@ -172,6 +172,30 @@ npm run dev
 
 ---
 
+# Screenshots
+
+### Login Page
+
+![Login Page](./assets/screenshots/loginpage.png)
+
+### Dashboard
+
+![Dashboard](./assets/screenshots/dashboard.png)
+
+### Tasks Page
+
+![Tasks Page](./assets/screenshots/tasks.png)
+
+### Swagger Auth
+
+![Swagger Auth](./assets/screenshots/swagger-auth.png)
+
+### Swagger Tasks
+
+![Swagger Tasks](./assets/screenshots/swagger-tasks.png)
+
+---
+
 # Features
 
 - Distributed microfrontend architecture
@@ -199,6 +223,10 @@ npm run dev
 - Production deployment
 
 ---
+# Demo
+
+https://task-manager-three-plum-11.vercel.app/
+
 
 # Author
 
