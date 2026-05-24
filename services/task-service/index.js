@@ -156,12 +156,29 @@ app.post(
  *     summary: Update task status
  *     tags:
  *       - Tasks
+ *     security:
+ *       - bearerAuth: []
+ *
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
+ *
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 example: completed
+ *
  *     responses:
  *       200:
  *         description: Task updated
